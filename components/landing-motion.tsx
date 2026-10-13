@@ -39,6 +39,22 @@ export function LandingMotion() {
         })
       })
     })
+
+    const watcher = document.querySelector(".peek-idle")
+    const events = ["pointermove", "pointerdown", "keydown", "scroll", "touchstart"]
+    let idle = 0
+    const wake = () => {
+      watcher?.classList.remove("is-watching")
+      window.clearTimeout(idle)
+      idle = window.setTimeout(() => watcher?.classList.add("is-watching"), 7000)
+    }
+    events.forEach((event) => window.addEventListener(event, wake, { passive: true }))
+    wake()
+
+    return () => {
+      events.forEach((event) => window.removeEventListener(event, wake))
+      window.clearTimeout(idle)
+    }
   })
 
   return null
